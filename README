@@ -1,0 +1,10 @@
+Use:
+
+Set your value into this var
+ftp_host = ''
+ftp_user = ''
+ftp_pass = ''
+ftp_dir = '/'
+
+Run program and insert info.
+Ps. You need permission to write on the folder when you run program 
