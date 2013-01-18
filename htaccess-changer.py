@@ -22,17 +22,11 @@
 #   authors and should not be interpreted as representing official policies, either expressed   #
 #   or implied, of Mirio                                                                        #   
 
-__version__ = "1.0"
+__version__ = "1.1"
 
 
 from ftplib import FTP
-import urllib2
-
-# Inizializzazione
-ftp_host = ''
-ftp_user = ''
-ftp_pass = ''
-ftp_dir = ''
+import urllib2,sys
 
 # Funzioni
 def get_myip():
@@ -52,18 +46,33 @@ def create_htaccess(allow_users):
     htaccess_write.close()
 
 # Utenti
-print "Htaccess-changer " + __version__
-allow_users = int(raw_input("Who have allowed to access in this folder?"
-                                                    "(except you)\n-> "))
+def main():
+    print "Htaccess-changer " + __version__
+    if sys.argv[1] != '-me':
+        allow_users = int(raw_input("How many pc allowed to access in this folder?"
+                                                            "(except you)\n-> "))
+    else:
+        allow_users = 0
 
-# Creazione e apertura
-create_htaccess(allow_users)
-htaccess = open(".htaccess", 'rb')
+    #ftp info
+    ftp_host = raw_input("Ftp Host?\n--> ")
+    ftp_user = raw_input("Ftp User?\n--> ")
+    ftp_pass = raw_input("Ftp pass?\n--> ")
+    ftp_dir = raw_input("Ftp dir?\n--> ")
 
-# FTP Upload
-ftp = FTP(ftp_host)
-ftp.login(ftp_user,ftp_pass)
-print ftp.sendcmd('TYPE I')
-print ftp.cwd(ftp_dir)
-print ftp.storbinary('STOR .htaccess', htaccess )
-print ftp.quit()
+    # Creazione e apertura
+    create_htaccess(allow_users)
+    htaccess = open(".htaccess", 'rb')
+
+    # FTP Upload
+    ftp = FTP(ftp_host)
+    ftp.login(ftp_user,ftp_pass)
+    print ftp.sendcmd('TYPE I')
+    print ftp.cwd(ftp_dir)
+    print ftp.storbinary('STOR .htaccess', htaccess )
+    print ftp.quit()
+
+try:
+    main()
+except KeyboardInterrupt:
+    print "\nQuit!"
